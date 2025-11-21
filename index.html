@@ -33,9 +33,6 @@
   balance: ethers.BigNumber.from(0),
   mytokenBalance: ethers.BigNumber.from(0),
 
-  transferAddress: '',
-  transferAmount: '',
-
   bookTitle: '',
   bookImage: '',
   bookPrice: '',
@@ -79,18 +76,6 @@
     this.mytokenBalance = await token.balanceOf(this.account);
   },
 
-  async transferToken() {
-    if (!this.transferAddress || !this.transferAmount) return;
-    const token = new ethers.Contract(this.tokenAddress, abi.IERC20, window.provider);
-    const signer = window.provider.getSigner();
-    const tx = await token.connect(signer).transfer(this.transferAddress, ethers.utils.parseEther(this.transferAmount));
-    await tx.wait();
-    this.transferAmount = '';
-    this.transferAddress = '';
-    await this.reloadMyTokenBalance();
-    alert('Token transferred!');
-  },
-
   async listBook() {
     const marketplace = new ethers.Contract(this.marketplaceAddress, abi.IMarketplace, window.provider);
     const signer = window.provider.getSigner();
@@ -116,7 +101,7 @@
     const marketplace = new ethers.Contract(this.marketplaceAddress, abi.IMarketplace, window.provider);
     const total = await marketplace.nextBookId();
     const arr = [];
-    for (let i=0; i<total; i++) {
+    for (let i = 0; i < total; i++) {
       const b = await marketplace.books(i);
       arr.push(b);
     }
@@ -133,13 +118,6 @@
 <h2>Account: <span x-text="account"></span></h2>
 <p>ETH Balance: <span x-text="ethers.utils.formatEther(balance)"></span></p>
 <p>NWN Token Balance: <span x-text="ethers.utils.formatEther(mytokenBalance)"></span></p>
-
-<!-- TRANSFER TOKEN -->
-<hr>
-<h3>Transfer NWN Token</h3>
-<input x-model="transferAddress" placeholder="Recipient Address">
-<input x-model="transferAmount" placeholder="Amount">
-<button @click="transferToken">Transfer</button>
 
 <!-- LIST BOOK -->
 <hr>
@@ -167,4 +145,14 @@
 <td x-text="book.seller"></td>
 <td x-text="ethers.utils.formatEther(book.price)"></td>
 <td x-text="book.sold ? 'Yes' : 'No'"></td>
-<td><button x-show="!book.sold" @click="buyBook(book.id)">Buy</button></td
+<td><button x-show="!book.sold" @click="buyBook(book.id)">Buy</button></td>
+</tr>
+</template>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</body>
+</html>
