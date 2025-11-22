@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import marketplaceAbi from "@/abi/abismart.json";
 
-const marketplaceAddress = "YOUR_MARKETPLACE_ADDRESS";
+const marketplaceAddress = "0xe18c143194ac22BB9aDb518f4EF969294131dc0c";
 
 export default function BookTable() {
   const [books, setBooks] = useState([]);
